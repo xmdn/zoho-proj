@@ -22,3 +22,4 @@ For usage we need in account in zoho crm create pipeline:
 
 1) Move to Settings--->Setup--->Customization--->Modules and fields
 2) Create here pipeline and include all stages
+![photo_2024-04-30_01-34-18](https://github.com/xmdn/zoho-proj/assets/16866473/29db2f7b-0728-4b93-b955-1e37da8a7b71)
