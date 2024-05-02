@@ -14,7 +14,7 @@ class DealAccountController extends Controller
         // Fetch all deals using an HTTP request or Eloquent query, depending on your setup
         $response = Http::withHeaders([
             'Authorization' => 'Zoho-oauthtoken ' . Session::get('accessToken'), // Add the Authorization header with the Zoho OAuth token
-        ])->get('https://www.zohoapis.eu/crm/v2/Deals'); // Example API endpoint
+        ])->get(env('ZOHO_API_URL') . '/crm/v2/Deals'); // Example API endpoint
         $deals = $response->json(); // Assuming the API response is JSON
         
         // Return the deals to the frontend
@@ -43,9 +43,8 @@ class DealAccountController extends Controller
         $response = Http::withHeaders([
             'Authorization' => 'Zoho-oauthtoken ' . Session::get('accessToken'), 
             'Content-Type' => 'application/json',
-        ])->post('https://www.zohoapis.eu/crm/v2/Deals', $zohoData);
+        ])->post(env('ZOHO_API_URL') . '/crm/v2/Deals', $zohoData);
 
-        // Example: Make API calls to Zoho CRM here using $formData
 
         return response()->json(['message' => 'Form submitted successfully', 'response' => $response], 200);
     }
@@ -56,7 +55,6 @@ class DealAccountController extends Controller
             'dealName' => 'required',
             'dealStage' => 'required',
             'dealAccount' => 'required',
-            // Add other validation rules as needed
         ]);
 
         $zohoData = [
@@ -65,7 +63,6 @@ class DealAccountController extends Controller
                     'Deal_Name' => $formData['dealName'],
                     'Stage' => $formData['dealStage'],
                     'Account_Name' => $formData['dealAccount']
-                    // Add other fields as needed
                 ],
             ],
         ];
@@ -73,7 +70,7 @@ class DealAccountController extends Controller
         $response = Http::withHeaders([
             'Authorization' => 'Zoho-oauthtoken ' . Session::get('accessToken'), 
             'Content-Type' => 'application/json',
-        ])->put("https://www.zohoapis.eu/crm/v2/Deals/{$id}", $zohoData);
+        ])->put(env('ZOHO_API_URL') . "/crm/v2/Deals/{$id}", $zohoData);
 
         // Example: Make API calls to update the deal in Zoho CRM here using $formData and $id
 
@@ -103,7 +100,7 @@ class DealAccountController extends Controller
         // Make an HTTP POST request to create the account record
         $response = Http::withHeaders([
             'Authorization' => 'Zoho-oauthtoken ' . Session::get('accessToken'), // Add the Authorization header with the Zoho OAuth token
-        ])->post('https://www.zohoapis.eu/crm/v2/Accounts', $payload);
+        ])->post(env('ZOHO_API_URL') . '/crm/v2/Accounts', $payload);
 
         // Check if the request was successful
         if ($response->successful()) {
@@ -118,7 +115,7 @@ class DealAccountController extends Controller
     public function getStages()
     {
         // Step 1: Fetch Layout ID for Deals Module
-        $layoutsUrl = 'https://www.zohoapis.eu/crm/v2/settings/layouts?module=Deals';
+        $layoutsUrl = env('ZOHO_API_URL') . '/crm/v2/settings/layouts?module=Deals';
         $layoutsResponse = Http::withHeaders([
             'Authorization' => 'Zoho-oauthtoken ' . Session::get('accessToken'),
         ])->get($layoutsUrl);
@@ -134,7 +131,7 @@ class DealAccountController extends Controller
         $layoutId = $layoutsData['layouts'][0]['id']; // Assuming the first layout ID is what you need
         
         // Step 2: Use the Obtained Layout ID in the Stages Endpoint
-        $url = 'https://www.zohoapis.eu/crm/v2.1/settings/pipeline?layout_id=' . $layoutId;
+        $url = env('ZOHO_API_URL') . '/crm/v2.1/settings/pipeline?layout_id=' . $layoutId;
         $response = Http::withHeaders([
             'Authorization' => 'Zoho-oauthtoken ' . Session::get('accessToken'), // Add the Authorization header with the Zoho OAuth token
         ])->get($url);
@@ -156,7 +153,7 @@ class DealAccountController extends Controller
         // Make an HTTP GET request to fetch accounts from Zoho CRM API
         $response = Http::withHeaders([
             'Authorization' => 'Zoho-oauthtoken ' . Session::get('accessToken'), // Add the Authorization header with the Zoho OAuth token
-        ])->get('https://www.zohoapis.eu/crm/v2/Accounts');
+        ])->get(env('ZOHO_API_URL') . '/crm/v2/Accounts');
 
         // Check if the request was successful
         if ($response->successful()) {
@@ -189,7 +186,7 @@ class DealAccountController extends Controller
         // Make an HTTP GET request to fetch accounts from Zoho CRM API
         $response = Http::withHeaders([
             'Authorization' => 'Zoho-oauthtoken ' . Session::get('accessToken'), // Add the Authorization header with the Zoho OAuth token
-        ])->get('https://www.zohoapis.eu/crm/v2/Deals');
+        ])->get(env('ZOHO_API_URL') . '/crm/v2/Deals');
         
         // Check if the request was successful
         if ($response->successful()) {

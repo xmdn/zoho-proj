@@ -22,7 +22,7 @@ class TokenRefreshMiddleware
         $tokenExpiresAt = Session::get('token_expires_at');
         if ($tokenExpiresAt && now()->gt($tokenExpiresAt)) {
             // Access token has expired, refresh it using the refresh token
-            $response = Http::asForm()->post('https://accounts.zoho.eu/oauth/v2/token', [
+            $response = Http::asForm()->post(env('ZOHO_API_ACCOUNTS') . '/oauth/v2/token', [
                 'refresh_token' => $refreshToken,
                 'client_id' => '1000.1M352HL7V79DSKGV1QMR4YR0C6S45V',
                 'client_secret' => '13475ee15bdc44ccc4b1123d63848e10efe5a616ff',

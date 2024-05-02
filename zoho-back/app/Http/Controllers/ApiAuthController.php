@@ -14,11 +14,11 @@ class ApiAuthController extends Controller
         $code = $request->query('code');
         // return $code;
 
-        $response = Http::asForm()->post('https://accounts.zoho.eu/oauth/v2/token', [
+        $response = Http::asForm()->post(env('ZOHO_API_ACCOUNTS') . '/oauth/v2/token', [
             'code' => $code,
-            'client_id' => '1000.1M352HL7V79DSKGV1QMR4YR0C6S45V',
-            'client_secret' => '13475ee15bdc44ccc4b1123d63848e10efe5a616ff',
-            'redirect_uri' => 'http://192.168.31.122:1002/oauth/callback',
+            'client_id' => env('ZOHO_API_KEY'),
+            'client_secret' => env('ZOHO_API_SECRET'),
+            'redirect_uri' => env('APP_URL') . '/oauth/callback',
             'grant_type' => 'authorization_code',
         ]);
         // return $response;

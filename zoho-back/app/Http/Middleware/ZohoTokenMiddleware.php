@@ -38,17 +38,6 @@ class ZohoTokenMiddleware
             }
         }
 
-        // Add the Zoho OAuth token to the header
-        // $request->headers->set('Authorization', 'Zoho-oauthtoken ' . $accessToken);
-        // Log the headers after adding the token
-        // Log the entire request including headers
-        Log::info('Full Request:');
-        Log::info($request->fullUrl());
-        Log::info($request->method());
-        Log::info($request->all());
-        Log::info($request->headers->all());
-
-
         return $response;
     }
 
@@ -56,7 +45,7 @@ class ZohoTokenMiddleware
     {
         $response = Http::withHeaders([
             'Authorization' => 'Zoho-oauthtoken ' . Session::get('accessToken'), // Add the Authorization header with the Zoho OAuth token
-        ])->get('https://www.zohoapis.eu/crm/v2/settings/modules');
+        ])->get(env('ZOHO_API_URL') . '/crm/v2/settings/modules');
         
         Log::info('Middleware CHECK', ['request' => $response->json(), 'status' => $response->status()]);
         return $response->successful() && $response->status() !== 401;
@@ -64,9 +53,9 @@ class ZohoTokenMiddleware
     
     private function refreshToken($refreshToken)
     {
-        $response = Http::asForm()->post('https://accounts.zoho.eu/oauth/v2/token', [
-            'client_id' => '1000.1M352HL7V79DSKGV1QMR4YR0C6S45V',
-            'client_secret' => '13475ee15bdc44ccc4b1123d63848e10efe5a616ff',
+        $response = Http::asForm()->post(env('ZOHO_API_ACCOUNTS') . '/oauth/v2/token', [
+            'client_id' => env('ZOHO_API_KEY'),
+            'client_secret' => env('ZOHO_API_SECRET'),
             'refresh_token' => $refreshToken,
             'grant_type' => 'refresh_token',
         ]);
